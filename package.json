@@ -19,7 +19,10 @@
   },
   "homepage": "https://github.com/Malakhow-Alexandr/NodeJs-Blended#readme",
   "dependencies": {
-    "express": "^4.18.2"
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "joi": "^17.9.2",
+    "mongoose": "^7.2.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"

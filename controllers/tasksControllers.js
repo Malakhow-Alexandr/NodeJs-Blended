@@ -7,11 +7,11 @@ const {
 } = require("../services/tasksServices");
 const { asyncWrapper } = require("../utils/asyncWrapper");
 
-let getTasks = async (req, res, next) => {
-  const tasks = await getTasksService();
+let getTasks = asyncWrapper(async (req, res) => {
+  const { page = 1, limit = 10, completed } = req.query;
+  const tasks = await getTasksService(page, limit, completed);
   res.json(tasks);
-};
-getTasks = asyncWrapper(getTasks);
+});
 
 const getTaskById = asyncWrapper(async (req, res, next) => {
   const { taskId } = req.params;
@@ -20,39 +20,27 @@ const getTaskById = asyncWrapper(async (req, res, next) => {
   res.json(oneTask);
 });
 
-const addTask = async (req, res, next) => {
-  try {
-    const newTask = await addTaskService(req.body);
-    console.log(req.body);
-    res.status(201).json(newTask);
-  } catch (error) {
-    next(error);
-  }
-};
+const addTask = asyncWrapper(async (req, res) => {
+  const newTask = await addTaskService(req.body);
+  console.log(req.body);
+  res.status(201).json(newTask);
+});
 
-const updateTask = async (req, res, next) => {
-  try {
-    const { taskId } = req.params;
-    const updateTask = await updateTaskService(taskId, req.body);
-    res.status(200).json(updateTask);
-  } catch (error) {
-    next(error);
-  }
-};
+const updateTask = asyncWrapper(async (req, res) => {
+  const { taskId } = req.params;
+  const updateTask = await updateTaskService(taskId, req.body);
+  res.status(200).json(updateTask);
+});
 
-const deleteTask = async (req, res, next) => {
-  try {
-    const { taskId } = req.params;
-    const deletedTaskId = await deleteTaskService(taskId);
-    res.status(200).json({ id: deletedTaskId });
+const deleteTask = asyncWrapper(async (req, res) => {
+  const { taskId } = req.params;
+  const deletedTaskId = await deleteTaskService(taskId);
+  res.status(200).json({ id: deletedTaskId });
 
-    // res.sendStatus(204);
+  // res.sendStatus(204);
 
-    return deletedTaskId;
-  } catch (error) {
-    next(error);
-  }
-};
+  return deletedTaskId;
+});
 
 module.exports = {
   getTasks,
