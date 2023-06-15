@@ -1,10 +1,17 @@
 const express = require("express");
-const { tasksRouter } = require("./routes/tasksRouter");
+const { tasksRouter } = require("./routers/tasksRouter");
+const { authRouter } = require("./routers/authRouter");
+
+const { rootRouter } = require("./routers");
 
 const app = express();
 app.use(express.json());
 
-app.use("/tasks", tasksRouter);
+app.use("/", rootRouter);
+
+app.use((req, res) => {
+  res.status(404).json({ message: "This route does not exist" });
+});
 
 app.use((err, req, res, next) => {
   console.log(err);

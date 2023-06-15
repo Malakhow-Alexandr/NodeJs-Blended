@@ -37,8 +37,6 @@ const deleteTask = asyncWrapper(async (req, res) => {
   const deletedTaskId = await deleteTaskService(taskId);
   res.status(200).json({ id: deletedTaskId });
 
-  // res.sendStatus(204);
-
   return deletedTaskId;
 });
 
