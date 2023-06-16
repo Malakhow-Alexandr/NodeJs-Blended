@@ -1,10 +1,15 @@
 const express = require("express");
 const { tasksRouter } = require("./routers/tasksRouter");
 const { authRouter } = require("./routers/authRouter");
+const logger = require("morgan");
 
 const { rootRouter } = require("./routers");
 
 const app = express();
+
+const formatsLogger = app.get("env") === "development" ? "dev" : "short";
+
+app.use(logger(formatsLogger));
 app.use(express.json());
 
 app.use("/", rootRouter);
