@@ -28,10 +28,10 @@ const authenticate = async (req, res, next) => {
 
     next();
   } catch (error) {
-    if (error.name !== TokenExpiredError) {
-      return next(new HttpError(401, "Unauthorized"));
-    }
     try {
+      if (error?.name !== "TokenExpiredError") {
+        return next(new HttpError(401, "Unauthorized"));
+      }
       jwt.verify(fetchedUser.refresh_token, REFRESH_TOKEN_SECRET);
 
       const { accessToken, refreshToken } = assignTokens(fetchedUser);
@@ -45,3 +45,5 @@ const authenticate = async (req, res, next) => {
     }
   }
 };
+
+module.exports = { authenticate };

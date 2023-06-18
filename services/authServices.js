@@ -35,7 +35,9 @@ const loginService = async (body) => {
   };
 };
 
-const logoutService = () => {};
+const logoutService = async (userId) => {
+  await User.findByIdAndUpdate(userId, { refresh_token: null });
+};
 
 module.exports = {
   signupService,

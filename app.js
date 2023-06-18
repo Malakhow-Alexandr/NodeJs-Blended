@@ -1,11 +1,14 @@
 const express = require("express");
-const { tasksRouter } = require("./routers/tasksRouter");
-const { authRouter } = require("./routers/authRouter");
+const cors = require("cors");
 const logger = require("morgan");
-
+const helmet = require("helmet");
+const { notFoundHandler } = require("./middlewares/notFoundHandler");
+const { globalErrorHandler } = require("./middlewares/globalErrorHandler");
 const { rootRouter } = require("./routers");
 
 const app = express();
+app.use(cors());
+app.use(helmet());
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
@@ -14,15 +17,8 @@ app.use(express.json());
 
 app.use("/", rootRouter);
 
-app.use((req, res) => {
-  res.status(404).json({ message: "This route does not exist" });
-});
+app.use(notFoundHandler);
 
-app.use((err, req, res, next) => {
-  console.log(err);
-  res.status(err.statusCode || 500).json({
-    message: err.message || "Something went wrong, please try again later",
-  });
-});
+app.use(globalErrorHandler);
 
 module.exports = { app };

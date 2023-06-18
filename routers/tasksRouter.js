@@ -12,8 +12,11 @@ const {
 } = require("../utils/validation/tasksValidationSchemas");
 
 const { validateBody } = require("../utils/validation/validateBody");
+const { authenticate } = require("../middlewares/authenticate");
 
 const router = express.Router();
+
+router.use(authenticate);
 
 router
   .route("/")
